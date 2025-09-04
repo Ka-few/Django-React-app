@@ -1,25 +1,34 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import api from '../api'
+import Notes from '../components/Notes'
+import '../styles/Home.css'
 
 function Home() {
   const [notes, setNotes] = useState([])
   const [content, setContent] = useState("")
   const [title, setTitle] = useState("")
 
+  useEffect(() => {
+    getNotes()
+  }, [])
+
   const getNotes = () => {
     api
-        .get("/api/notes")
+        .get("/api/notes/")
         .then((res) => res.data)
-        .then((data) => {setNotes(data); console.log(data)})
+        .then((data) => {setNotes(data); 
+          console.log(data);
+        })
         .catch((err) => alert(err))
   }
 
   const deleteNote = (id) => {
-    api.delete(`/api/notes/delete/${id}`).then((res) => {
+    api.delete(`/api/notes/delete/${id}/`).then((res) => {
       if (res.status === 204) alert("Note deleted!")
         else alert("Failed to delete note.")
+      getNotes()
     }).catch((error) => alert(error))
-    getNotes()
+    
 
   }
 
@@ -29,16 +38,21 @@ function Home() {
        .then((res) => {
         if (res.status === 201) alert("Note created!")
           else alert("Failed to make note")
+        getNotes()
        })
        .catch((err) => alert(err))
 
-       getNotes()
+       
   }
   return (
     <div>
       <div>
 
-      <h2>Notes</h2>
+        <h2>Notes</h2>
+        {notes.map((note) => (
+          <Notes note={note} onDelete={deleteNote} key={note.id} />
+        ))}
+
       </div>
       <h2>Create a Note</h2>
       <form onSubmit={createNote}>
