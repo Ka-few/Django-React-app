@@ -1,0 +1,14 @@
+schemaVersion: 1.2
+type: service
+name: react-frontend
+runtime: nodejs
+
+build:
+  dockerfile: Dockerfile
+
+endpoints:
+  - name: Frontend
+    port: 80
+    type: Web
+    context: /
+    networkVisibility: Public

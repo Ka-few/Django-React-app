@@ -1,0 +1,14 @@
+schemaVersion: 1.2
+type: service
+name: django-backend
+runtime: python
+
+build:
+  dockerfile: Dockerfile
+
+endpoints:
+  - name: REST API
+    port: 8000
+    type: REST
+    context: /
+    networkVisibility: Public
