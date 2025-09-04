@@ -1,14 +1,28 @@
 schemaVersion: 1.2
-type: service
-name: django-backend
-runtime: python
+type: project
+name: my-fullstack-app
 
-build:
-  dockerfile: Dockerfile
+components:
+  - name: django-backend
+    type: service
+    runtime: python
+    build:
+      dockerfile: backend/Dockerfile
+    endpoints:
+      - name: REST API
+        port: 8000
+        type: REST
+        context: /
+        networkVisibility: Public
 
-endpoints:
-  - name: REST API
-    port: 8000
-    type: REST
-    context: /
-    networkVisibility: Public
+  - name: react-frontend
+    type: service
+    runtime: nodejs
+    build:
+      dockerfile: frontend/Dockerfile
+    endpoints:
+      - name: Frontend
+        port: 80
+        type: Web
+        context: /
+        networkVisibility: Public
