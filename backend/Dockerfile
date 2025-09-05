@@ -19,5 +19,8 @@ COPY . .
 EXPOSE 8000
 
 # Run Django with Gunicorn
-CMD ["gunicorn", "backend.wsgi:application", "--bind", "0.0.0.0:${PORT}"]
+CMD if [ "$APP_ENV" = "development" ]; \
+    then python manage.py runserver 0.0.0.0:${PORT:-8000}; \
+    else gunicorn backend.wsgi:application --bind 0.0.0.0:${PORT:-8000}; \
+    fi
 
